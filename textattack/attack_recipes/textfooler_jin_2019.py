@@ -66,7 +66,7 @@ class TextFoolerJin2019(AttackRecipe):
         #
         # Only replace words with the same part of speech (or nouns with verbs)
         #
-        constraints.append(PartOfSpeech(allow_verb_noun_swap=True))
+        constraints.append(PartOfSpeech(allow_verb_noun_swap=False))
         #
         # Universal Sentence Encoder with a minimum angular similarity of ε = 0.5.
         #
