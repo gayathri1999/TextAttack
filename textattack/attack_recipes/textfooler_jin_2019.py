@@ -18,7 +18,7 @@ from textattack.constraints.semantics.sentence_encoders import UniversalSentence
 from textattack.goal_functions import UntargetedClassification
 from textattack.search_methods import GreedyWordSwapWIR
 from textattack.transformations import WordSwapEmbedding
-
+from textattack.constraints.overlap import MaxWordsPerturbed
 from .attack_recipe import AttackRecipe
 
 
