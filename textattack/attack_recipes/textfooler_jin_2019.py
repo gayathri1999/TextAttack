@@ -75,7 +75,7 @@ class TextFoolerJin2019(AttackRecipe):
         # new threshold is 1 - (0.5) / pi = 0.840845057
         #
         use_constraint = UniversalSentenceEncoder(
-            threshold=0.74535209015,
+            threshold=0.936338022,
             metric="angular",
             compare_against_original=False,
             window_size=15,
