@@ -60,7 +60,7 @@ class TextFoolerJin2019(AttackRecipe):
         # (The paper claims 0.7, but analysis of the released code and some empirical
         # results show that it's 0.5.)
         #
-        constraints.append(WordEmbeddingDistance(min_cos_sim=0.3))
+        constraints.append(WordEmbeddingDistance(min_cos_sim=0.5))
         constraints.append(MaxWordsPerturbed(max_percent=0.75))
         constraints.append(LevenshteinEditDistance(12))
         #
