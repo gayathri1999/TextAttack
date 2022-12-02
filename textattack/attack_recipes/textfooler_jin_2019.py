@@ -61,7 +61,7 @@ class TextFoolerJin2019(AttackRecipe):
         # results show that it's 0.5.)
         #
         constraints.append(WordEmbeddingDistance(min_cos_sim=0.5))
-        constraints.append(MaxWordsPerturbed(max_percent=0.30))
+        constraints.append(MaxWordsPerturbed(max_percent=0.75))
         constraints.append(LevenshteinEditDistance(30))
         #
         # Only replace words with the same part of speech (or nouns with verbs)
