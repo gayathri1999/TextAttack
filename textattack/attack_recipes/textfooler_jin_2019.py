@@ -24,6 +24,7 @@ from textattack.transformations import (WordSwapEmbedding, CompositeTransformati
 from textattack.constraints.overlap import MaxWordsPerturbed
 from .attack_recipe import AttackRecipe
 from textattack.constraints.overlap import LevenshteinEditDistance
+from textattack.search_methods import GreedySearch
 
 
 class TextFoolerJin2019(AttackRecipe):
@@ -127,6 +128,6 @@ class TextFoolerJin2019(AttackRecipe):
         #
         # Greedily swap words with "Word Importance Ranking".
         #
-        search_method = GreedyWordSwapWIR(wir_method="delete")
+        search_method = GreedySearch()
 
         return Attack(goal_function, constraints, transformation, search_method)
