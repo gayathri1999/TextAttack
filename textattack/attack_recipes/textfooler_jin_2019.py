@@ -98,8 +98,8 @@ class TextFoolerJin2019(AttackRecipe):
         # (The paper claims 0.7, but analysis of the released code and some empirical
         # results show that it's 0.5.)
         #
-        constraints.append(WordEmbeddingDistance(min_cos_sim=0.8))
-        constraints.append(MaxWordsPerturbed(max_percent=0.75))
+        constraints.append(WordEmbeddingDistance(min_cos_sim=0.5))
+        constraints.append(MaxWordsPerturbed(max_percent=0.0001))
         constraints.append(LevenshteinEditDistance(12))
         #
         # Only replace words with the same part of speech (or nouns with verbs)
@@ -113,7 +113,7 @@ class TextFoolerJin2019(AttackRecipe):
         # new threshold is 1 - (0.5) / pi = 0.840845057
         #
         use_constraint = UniversalSentenceEncoder(
-            threshold=0.936338022,
+            threshold=0.840845057,
             metric="angular",
             compare_against_original=False,
             window_size=15,
