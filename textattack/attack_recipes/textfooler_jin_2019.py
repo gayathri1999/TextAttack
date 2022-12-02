@@ -17,7 +17,10 @@ from textattack.constraints.semantics import WordEmbeddingDistance
 from textattack.constraints.semantics.sentence_encoders import UniversalSentenceEncoder
 from textattack.goal_functions import UntargetedClassification
 from textattack.search_methods import GreedyWordSwapWIR
-from textattack.transformations import (WordSwapEmbedding, CompositeTransformation)
+from textattack.transformations import (WordSwapEmbedding, CompositeTransformation,WordSwapHomoglyphSwap,
+    WordSwapNeighboringCharacterSwap,
+    WordSwapRandomCharacterDeletion,
+    WordSwapRandomCharacterInsertion)
 from textattack.constraints.overlap import MaxWordsPerturbed
 from .attack_recipe import AttackRecipe
 from textattack.constraints.overlap import LevenshteinEditDistance
