@@ -37,7 +37,42 @@ class TextFoolerJin2019(AttackRecipe):
         # Swap words with their 50 closest embedding nearest-neighbors.
         # Embedding: Counter-fitted PARAGRAM-SL999 vectors.
         #
-        transformation = WordSwapEmbedding(max_candidates=50)
+        
+        transformation = CompositeTransformation(
+            [
+                # (1) Insert: Insert a space into the word.
+                # Generally, words are segmented by spaces in English. Therefore,
+                # we can deceive classifiers by inserting spaces into words.
+                WordSwapRandomCharacterInsertion(
+                    random_one=True,
+                    letters_to_insert=" ",
+                    skip_first_char=True,
+                    skip_last_char=True,
+                ),
+                # (2) Delete: Delete a random character of the word except for the first
+                # and the last character.
+                WordSwapRandomCharacterDeletion(
+                    random_one=True, skip_first_char=True, skip_last_char=True
+                ),
+                # (3) Swap: Swap random two adjacent letters in the word but do not
+                # alter the first or last letter. This is a common occurrence when
+                # typing quickly and is easy to implement.
+                WordSwapNeighboringCharacterSwap(
+                    random_one=True, skip_first_char=True, skip_last_char=True
+                ),
+                # (4) Substitute-C (Sub-C): Replace characters with visually similar
+                # characters (e.g., replacing “o” with “0”, “l” with “1”, “a” with “@”)
+                # or adjacent characters in the keyboard (e.g., replacing “m” with “n”).
+                WordSwapHomoglyphSwap(),
+                # (5) Substitute-W
+                # (Sub-W): Replace a word with its topk nearest neighbors in a
+                # context-aware word vector space. Specifically, we use the pre-trained
+                # GloVe model [30] provided by Stanford for word embedding and set
+                # topk = 5 in the experiment.
+                WordSwapEmbedding(max_candidates=50),
+            ]
+        )
+        #transformation = WordSwapEmbedding(max_candidates=50)
         #
         # Don't modify the same word twice or the stopwords defined
         # in the TextFooler public implementation.
