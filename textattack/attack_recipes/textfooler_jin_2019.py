@@ -1,9 +1,7 @@
 """
-
 TextFooler (Is BERT Really Robust?)
 ===================================================
 A Strong Baseline for Natural Language Attack on Text Classification and Entailment)
-
 """
 
 from textattack import Attack
@@ -17,22 +15,15 @@ from textattack.constraints.semantics import WordEmbeddingDistance
 from textattack.constraints.semantics.sentence_encoders import UniversalSentenceEncoder
 from textattack.goal_functions import UntargetedClassification
 from textattack.search_methods import GreedyWordSwapWIR
-from textattack.transformations import (WordSwapEmbedding, CompositeTransformation,WordSwapHomoglyphSwap,
-    WordSwapNeighboringCharacterSwap,
-    WordSwapRandomCharacterDeletion,
-    WordSwapRandomCharacterInsertion)
+from textattack.transformations import WordSwapEmbedding
 from textattack.constraints.overlap import MaxWordsPerturbed
 from .attack_recipe import AttackRecipe
 from textattack.constraints.overlap import LevenshteinEditDistance
-from textattack.search_methods import GreedySearch
-from textattack.search_methods import GreedyWordSwapWIR
 
 
 class TextFoolerJin2019(AttackRecipe):
     """Jin, D., Jin, Z., Zhou, J.T., & Szolovits, P. (2019).
-
     Is BERT Really Robust? Natural Language Attack on Text Classification and Entailment.
-
     https://arxiv.org/abs/1907.11932
     """
 
@@ -42,42 +33,7 @@ class TextFoolerJin2019(AttackRecipe):
         # Swap words with their 50 closest embedding nearest-neighbors.
         # Embedding: Counter-fitted PARAGRAM-SL999 vectors.
         #
-        
-        transformation = CompositeTransformation(
-            [
-                # (1) Insert: Insert a space into the word.
-                # Generally, words are segmented by spaces in English. Therefore,
-                # we can deceive classifiers by inserting spaces into words.
-                WordSwapRandomCharacterInsertion(
-                    random_one=True,
-                    letters_to_insert=" ",
-                    skip_first_char=True,
-                    skip_last_char=True,
-                ),
-                # (2) Delete: Delete a random character of the word except for the first
-                # and the last character.
-                WordSwapRandomCharacterDeletion(
-                    random_one=True, skip_first_char=True, skip_last_char=True
-                ),
-                # (3) Swap: Swap random two adjacent letters in the word but do not
-                # alter the first or last letter. This is a common occurrence when
-                # typing quickly and is easy to implement.
-                WordSwapNeighboringCharacterSwap(
-                    random_one=True, skip_first_char=True, skip_last_char=True
-                ),
-                # (4) Substitute-C (Sub-C): Replace characters with visually similar
-                # characters (e.g., replacing “o” with “0”, “l” with “1”, “a” with “@”)
-                # or adjacent characters in the keyboard (e.g., replacing “m” with “n”).
-                WordSwapHomoglyphSwap(),
-                # (5) Substitute-W
-                # (Sub-W): Replace a word with its topk nearest neighbors in a
-                # context-aware word vector space. Specifically, we use the pre-trained
-                # GloVe model [30] provided by Stanford for word embedding and set
-                # topk = 5 in the experiment.
-                WordSwapEmbedding(max_candidates=50),
-            ]
-        )
-        #transformation = WordSwapEmbedding(max_candidates=50)
+        transformation = WordSwapEmbedding(max_candidates=50)
         #
         # Don't modify the same word twice or the stopwords defined
         # in the TextFooler public implementation.
@@ -106,7 +62,7 @@ class TextFoolerJin2019(AttackRecipe):
         #
         # Only replace words with the same part of speech (or nouns with verbs)
         #
-        constraints.append(PartOfSpeech(allow_verb_noun_swap=False))
+        constraints.append(PartOfSpeech(allow_verb_noun_swap=True))
         #
         # Universal Sentence Encoder with a minimum angular similarity of ε = 0.5.
         #
@@ -129,6 +85,6 @@ class TextFoolerJin2019(AttackRecipe):
         #
         # Greedily swap words with "Word Importance Ranking".
         #
-        search_method = GreedyWordSwapWIR()
+        search_method = GreedyWordSwapWIR(wir_method="delete")
 
         return Attack(goal_function, constraints, transformation, search_method)
