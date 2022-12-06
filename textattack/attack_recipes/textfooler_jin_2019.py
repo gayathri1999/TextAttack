@@ -16,9 +16,8 @@ from textattack.constraints.semantics.sentence_encoders import UniversalSentence
 from textattack.goal_functions import UntargetedClassification
 from textattack.search_methods import GreedyWordSwapWIR
 from textattack.transformations import WordSwapEmbedding
-from textattack.constraints.overlap import MaxWordsPerturbed
+
 from .attack_recipe import AttackRecipe
-from textattack.constraints.overlap import LevenshteinEditDistance
 
 
 class TextFoolerJin2019(AttackRecipe):
@@ -57,8 +56,6 @@ class TextFoolerJin2019(AttackRecipe):
         # results show that it's 0.5.)
         #
         constraints.append(WordEmbeddingDistance(min_cos_sim=0.5))
-        constraints.append(MaxWordsPerturbed(max_percent=0.75))
-        constraints.append(LevenshteinEditDistance(50))
         #
         # Only replace words with the same part of speech (or nouns with verbs)
         #
